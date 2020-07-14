@@ -10,6 +10,17 @@ import Foundation
 class ScannerOverlay: UIView {
     private let line: UIView = UIView()
     
+
+    
+    lazy var hintLabel:UILabel = { ()->UILabel in
+        let  label = UILabel.init(frame: CGRect.init(x: 0, y: -40, width: UIScreen.main.bounds.width, height: 20))
+        label.textColor = UIColor.white
+       label.text = "请将条码/二维码放入框内"
+       label.font = UIFont.systemFont(ofSize: 13)
+       label.textAlignment = .center
+         return label
+     }()
+    
     private var scanLineRect: CGRect {
         let scanRect = calculateScanRect()
         let positionY = scanRect.origin.y + (scanRect.size.height / 2)
@@ -27,6 +38,9 @@ class ScannerOverlay: UIView {
         line.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(line)
+        addSubview(hintLabel)
+
+        
     }
     
     required init?(coder: NSCoder) {
@@ -50,13 +64,14 @@ class ScannerOverlay: UIView {
         let holeRectIntersection = holeRect.intersection(rect)
         UIColor.clear.setFill()
         UIRectFill(holeRectIntersection)
-        
+        hintLabel.frame = CGRect.init(x: 0, y: holeRect.maxY + 16, width: UIScreen.main.bounds.width, height: 20)
+
         // draw a horizontal line over the middle
         let lineRect = scanLineRect
         line.frame = lineRect
         
         // draw the green corners
-        let cornerSize: CGFloat = 30
+        let cornerSize: CGFloat = 20
         let path = UIBezierPath()
         
         //top left corner
@@ -80,10 +95,13 @@ class ScannerOverlay: UIView {
         path.move(to: CGPoint(x: holeRect.origin.x + cornerSize, y: bottomHoleY))
         path.addLine(to: CGPoint(x: holeRect.origin.x, y: bottomHoleY))
         path.addLine(to: CGPoint(x: holeRect.origin.x, y: bottomHoleY - cornerSize))
-        
-        path.lineWidth = 2
-        UIColor.green.setStroke()
+        path.lineWidth = 4
+        UIColor.init(red: 62.0/255.0, green: 186/255.0, blue: 222/255.0, alpha: 1).setStroke()
         path.stroke()
+        
+        
+        
+        
     }
     
     public func startAnimating() {
@@ -109,8 +127,8 @@ class ScannerOverlay: UIView {
         
         let isLandscape = frameWidth > frameHeight
         let widthOnPortrait = isLandscape ? frameHeight : frameWidth
-        let scanRectWidth = widthOnPortrait * 0.8
-        let aspectRatio: CGFloat = 3.0 / 4.0
+        let scanRectWidth = widthOnPortrait * 0.7
+        let aspectRatio: CGFloat = 1
         let scanRectHeight = scanRectWidth * aspectRatio
         
         if isLandscape {
@@ -119,7 +137,7 @@ class ScannerOverlay: UIView {
         }
         
         let scanRectOriginX = (frameWidth - scanRectWidth) / 2
-        let scanRectOriginY = (frameHeight - scanRectHeight) / 2
+        let scanRectOriginY = (frameHeight - scanRectHeight) / 2 - 44
         return CGRect(x: scanRectOriginX,
                       y: scanRectOriginY,
                       width: scanRectWidth,
