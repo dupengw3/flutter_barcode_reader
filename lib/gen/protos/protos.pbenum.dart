@@ -48,11 +48,13 @@ class ResultType extends $pb.ProtobufEnum {
   static const ResultType Barcode = ResultType._(0, 'Barcode');
   static const ResultType Cancelled = ResultType._(1, 'Cancelled');
   static const ResultType Error = ResultType._(2, 'Error');
+  static const ResultType HandInput = ResultType._(3, 'HandInput');
 
   static const $core.List<ResultType> values = <ResultType> [
     Barcode,
     Cancelled,
     Error,
+    HandInput,
   ];
 
   static final $core.Map<$core.int, ResultType> _byValue = $pb.ProtobufEnum.initByValue(values);
