@@ -8,6 +8,7 @@ enum ResultType {
     Barcode = 0;
     Cancelled = 1;
     Error = 2;
+    HandInput = 3;
 }
 
 message ScanResult {

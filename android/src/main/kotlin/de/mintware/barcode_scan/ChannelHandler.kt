@@ -28,7 +28,8 @@ class ChannelHandler(private val activityHelper: ActivityHelper
                 .putAllStrings(mapOf(
                         "cancel" to "Cancel",
                         "flash_on" to "Flash on",
-                        "flash_off" to "Flash off"
+                        "flash_off" to "Flash off",
+                        "hand_input" to "Hand input"
                 ))
                 .setAndroid(Protos.AndroidConfiguration
                         .newBuilder()
