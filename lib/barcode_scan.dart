@@ -4,6 +4,3 @@ export 'gen/protos/protos.pb.dart' show BarcodeFormat, ResultType;
 
 export 'model/model.dart';
 export 'platform_wrapper.dart';
-
-// dependencies:
-//   protobuf: ^1.0.1
