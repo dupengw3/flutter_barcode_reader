@@ -108,7 +108,7 @@ class BarcodeScannerViewController: UIViewController {
       )
     }
     
-    let btn = UIButton.init(frame: CGRect.init(x: 0, y: 0, width: 150, height: 44))
+    let btn = UIButton.init(frame: CGRect.init(x: 0, y: 0, width:type == 0 ? 150 : 90, height: 44))
     btn.setTitle(type == 0 ?"添加/查询母开关" : "扫一扫", for: .normal)
     btn.titleLabel?.textColor = .white
     btn.setImage(UIImage.init(named: "backArrow") ?? UIImage(), for: .normal)
