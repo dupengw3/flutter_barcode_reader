@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hand_input">手动输入</string>
+    <string name="open_flashlight">打开手电筒</string>
+    <string name="close_flashlight">关闭手电筒</string>
+    <string name="add_search_switch">添加/查询母开关</string>
+</resources>

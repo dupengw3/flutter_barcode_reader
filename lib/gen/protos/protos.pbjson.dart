@@ -29,6 +29,7 @@ const ResultType$json = const {
     const {'1': 'Barcode', '2': 0},
     const {'1': 'Cancelled', '2': 1},
     const {'1': 'Error', '2': 2},
+    const {'1': 'HandInput', '2': 3},
   ],
 };
 

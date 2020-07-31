@@ -7,6 +7,10 @@ import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 
 class ScanResultHandler(private val result: MethodChannel.Result) : ActivityResultListener {
 
+    companion object {
+        const val RESULT_HAND_INPUT = 0x999
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
 
         var scanResult = ByteArray(0)
@@ -18,6 +22,12 @@ class ScanResultHandler(private val result: MethodChannel.Result) : ActivityResu
             Activity.RESULT_CANCELED -> {
                 scanResult = Protos.ScanResult.newBuilder()
                         .setType(Protos.ResultType.Cancelled)
+                        .build()
+                        .toByteArray()
+            }
+            RESULT_HAND_INPUT -> {
+                scanResult = Protos.ScanResult.newBuilder()
+                        .setType(Protos.ResultType.HandInput)
                         .build()
                         .toByteArray()
             }
