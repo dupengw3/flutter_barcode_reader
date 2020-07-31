@@ -118,7 +118,8 @@ class BarcodeScannerViewController: UIViewController {
 
     if type == 0{
      view.addSubview(handInputBtn)
-    torchBtn.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width, height: 80);
+    }else{
+        torchBtn.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width, height: 80);
     }
      
     updateToggleFlashButton()
