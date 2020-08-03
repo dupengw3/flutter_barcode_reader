@@ -8,6 +8,26 @@
 import Foundation
 import MTBBarcodeScanner
 
+//let bundle = Bundle(for: BarcodeScannerViewController.self)
+//
+//let screenWidth = UIScreen.main.bounds.width
+//
+//let screenHeight = UIScreen.main.bounds.height
+//
+//let statusHeight = UIApplication.shared.statusBarFrame.height
+//
+//
+//public func imageNamed(_ name:String)-> UIImage{
+//
+//    guard let image = UIImage(named: name, in: bundle, compatibleWith: nil) else{
+//        return UIImage()
+//    }
+//
+//    return image
+//
+//}
+
+
 class BarcodeScannerViewController: UIViewController {
   private var previewView: UIView?
   private var scanRect: ScannerOverlay?
@@ -60,7 +80,7 @@ class BarcodeScannerViewController: UIViewController {
         btn.titleLabel?.textColor = .white
         btn.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        btn.setImage(UIImage.init(named: "hand_input") ?? UIImage(), for: .normal)
+        btn.setImage(imageNamed("hand_input"), for: .normal)
         btn.addTarget(self, action: #selector(handInput), for: .touchUpInside)
         return btn
     }()
@@ -72,7 +92,7 @@ class BarcodeScannerViewController: UIViewController {
         btn.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
         btn.titleLabel?.textColor = .white
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        btn.setImage(UIImage.init(named: "torch") ?? UIImage(), for: .normal)
+        btn.setImage(imageNamed("torch"), for: .normal)
         btn.addTarget(self, action: #selector(onToggleFlash), for: .touchUpInside)
         return btn
     }()
@@ -111,7 +131,7 @@ class BarcodeScannerViewController: UIViewController {
     let btn = UIButton.init(frame: CGRect.init(x: 0, y: 0, width:type == 0 ? 150 : 90, height: 44))
     btn.setTitle(type == 0 ?"添加/查询母开关" : "扫一扫", for: .normal)
     btn.titleLabel?.textColor = .white
-    btn.setImage(UIImage.init(named: "backArrow") ?? UIImage(), for: .normal)
+    btn.setImage(imageNamed("backArrow"), for: .normal)
     btn.addTarget(self, action: #selector(cancel), for: .touchUpInside)
     navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: btn)
     view.addSubview(torchBtn)
@@ -178,6 +198,7 @@ class BarcodeScannerViewController: UIViewController {
     }
     scanRect = ScannerOverlay(frame: bounds)
     if let scanRect = scanRect {
+      scanRect.style = .grid
       scanRect.translatesAutoresizingMaskIntoConstraints = false
       scanRect.backgroundColor = UIColor.clear
       view.addSubview(scanRect)
