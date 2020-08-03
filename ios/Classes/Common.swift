@@ -18,7 +18,7 @@ let statusHeight = UIApplication.shared.statusBarFrame.height
 
 
 public func imageNamed(_ name:String)-> UIImage{
-    guard let image = UIImage(named: name, in: bundle, compatibleWith: nil) else{
+    guard let image = UIImage(named: name) else{//, in: bundle, compatibleWith: nil
         return UIImage()
     }
     return image
