@@ -8,7 +8,7 @@
 
 import Foundation
 
-let bundle = Bundle(for: "Media")
+let bundle = Bundle(for: BarcodeScannerViewController.self)
 
 let screenWidth = UIScreen.main.bounds.width
 
