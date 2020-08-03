@@ -23,6 +23,6 @@ A new flutter plugin project.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
   s.swift_version = '5.0'
   s.resource_bundle = {
-    'Media' => ['barcode_scan/ios/Classes/Media.xcassets']
+    'Media' => ['barcode_scan/ios/Classes/*']
   }
 end
