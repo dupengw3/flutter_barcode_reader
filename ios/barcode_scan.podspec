@@ -22,7 +22,11 @@ A new flutter plugin project.
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
   s.swift_version = '5.0'
+
 #  s.resource_bundle = {
-#    'Media' => ['barcode_scan/ios/Classes/*.xcassets']https://www.jianshu.com/p/e772b0713f9a
+##    'barcode_scan' => ['barcode_scan/ios/Assets/*.xcassets']#  https://www.jianshu.com/p/e772b0713f9a
+#    'barcode_scan' => ['barcode_scan/**/*.{xib,png,xcassets}']
+#
 #  }
+
 end
