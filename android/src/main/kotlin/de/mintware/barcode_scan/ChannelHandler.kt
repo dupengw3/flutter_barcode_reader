@@ -29,7 +29,8 @@ class ChannelHandler(private val activityHelper: ActivityHelper
                         "cancel" to "Cancel",
                         "flash_on" to "Flash on",
                         "flash_off" to "Flash off",
-                        "hand_input" to "Hand input"
+                        "hand_input" to "Hand input",
+                        "type" to "0"
                 ))
                 .setAndroid(Protos.AndroidConfiguration
                         .newBuilder()

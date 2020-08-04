@@ -15,6 +15,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         title = ""
     }
 
+    private var scanType: String = "0";
     private lateinit var config: Protos.Configuration
     private var scannerView: ZXingScannerView? = null
 
@@ -44,14 +45,17 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_barcode_scanner)
         config = Protos.Configuration.parseFrom(intent.extras!!.getByteArray(EXTRA_CONFIG))
+        scanType = config.stringsMap["type"] ?: "0"
     }
 
     private fun setupScannerView() {
         if (scannerView != null) {
             return
         }
+        findViewById<TextView>(R.id.tv_title).setText(if (scanType == "0") R.string.add_search_switch else R.string.scan)
         val tVFlashLight = findViewById<TextView>(R.id.tv_flashlight)
         findViewById<View>(R.id.back).setOnClickListener { onBackPressed() }
+        findViewById<View>(R.id.hand_input).visibility = if (scanType == "0") View.VISIBLE else View.GONE
         findViewById<View>(R.id.hand_input).setOnClickListener {
             setResult(ScanResultHandler.RESULT_HAND_INPUT)
             finish()
