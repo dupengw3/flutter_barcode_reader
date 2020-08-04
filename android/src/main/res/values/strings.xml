@@ -4,4 +4,6 @@
     <string name="open_flashlight">打开手电筒</string>
     <string name="close_flashlight">关闭手电筒</string>
     <string name="add_search_switch">添加/查询母开关</string>
+    <string name="scan">扫一扫</string>
+    <string name="hint">请将条码/二维码放入框内</string>
 </resources>

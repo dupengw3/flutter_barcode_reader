@@ -6,14 +6,10 @@ import android.animation.ValueAnimator.RESTART
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
-import android.os.Build
-import android.util.Log
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
-import androidx.annotation.RequiresApi
 import me.dm7.barcodescanner.core.ViewFinderView
-import kotlin.math.roundToInt
+import kotlin.math.abs
 
 /**
  * Created on 2020/7/21.
@@ -25,6 +21,7 @@ class CustomViewFinderView(context: Context) : ViewFinderView(context) {
     private var currentAnimValue: Float = 0f
     private var laser : Bitmap
     private val animator: ValueAnimator
+    private val textPaint : Paint
 
     init {
         setLayerType(LAYER_TYPE_SOFTWARE, null);
@@ -45,6 +42,25 @@ class CustomViewFinderView(context: Context) : ViewFinderView(context) {
         animator.repeatCount = INFINITE
         animator.startDelay = 500
         animator.start()
+
+        textPaint = Paint()
+        textPaint.textAlign = Paint.Align.CENTER
+        textPaint.color = Color.parseColor("#80FFFFFF")
+        textPaint.textSize = Resources.getSystem().displayMetrics.density * 13
+    }
+
+    override fun drawViewFinderBorder(canvas: Canvas?) {
+        super.drawViewFinderBorder(canvas)
+        drawHint(canvas)
+    }
+
+    private fun drawHint(canvas: Canvas?) {
+        val left = (framingRect.right - framingRect.left) / 2.0 + framingRect.left
+        val baseLineY = abs(textPaint.ascent() + textPaint.descent())
+        canvas?.drawText(context.getString(R.string.hint),
+                left.toFloat(),
+                framingRect.bottom.toFloat() + baseLineY + Resources.getSystem().displayMetrics.density * 16,
+                textPaint)
     }
 
     override fun drawLaser(canvas: Canvas?) {

@@ -229,7 +229,12 @@ class _MyAppState extends State<_MyApp> {
               icon: Icon(Icons.camera),
               tooltip: "Scan",
               onPressed: scan,
-            )
+            ),
+            IconButton(
+              icon: Icon(Icons.camera_alt),
+              tooltip: "Scan",
+              onPressed: scan1,
+            ),
           ],
         ),
         body: ListView(
@@ -248,6 +253,46 @@ class _MyAppState extends State<_MyApp> {
           "cancel": "取消",
           "flash_on": "开灯",
           "flash_off": "关灯",
+        },
+        restrictFormat: _possibleFormats,
+        useCamera: -1,
+        autoEnableFlash: false,
+        android: AndroidOptions(
+          aspectTolerance: 0.5,// -1 到 1
+          useAutoFocus: true,
+        ),
+      );
+
+      var result = await BarcodeScanner.scan(options: options);
+
+      setState(() => scanResult = result);
+    } on PlatformException catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = 'The user did not grant the camera permission!';
+        });
+      } else {
+        result.rawContent = 'Unknown error: $e';
+      }
+      setState(() {
+        scanResult = result;
+      });
+    }
+  }
+
+  Future scan1() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel": "取消",
+          "flash_on": "开灯",
+          "flash_off": "关灯",
+          "type": "1",
         },
         restrictFormat: _possibleFormats,
         useCamera: -1,
