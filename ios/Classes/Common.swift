@@ -8,7 +8,13 @@
 
 import Foundation
 
-let bundle = Bundle(for: BarcodeScannerViewController.self)
+//let bundle = Bundle(for: BarcodeScannerViewController.self)
+
+
+var bundle: Bundle{
+ let associateBundleURL:URL = (Bundle.main.url(forResource: "Frameworks", withExtension: nil)?.appendingPathComponent("barcode_scan").appendingPathExtension("framework"))!
+  return Bundle.init(url: associateBundleURL)!
+ }
 
 let screenWidth = UIScreen.main.bounds.width
 
@@ -17,8 +23,9 @@ let screenHeight = UIScreen.main.bounds.height
 let statusHeight = UIApplication.shared.statusBarFrame.height
 
 
+
 public func imageNamed(_ name:String)-> UIImage{
-    guard let image = UIImage(named: name) else{//, in: bundle, compatibleWith: nil
+    guard let image = UIImage(named: name, in: bundle, compatibleWith: nil) else{
         return UIImage()
     }
     return image
