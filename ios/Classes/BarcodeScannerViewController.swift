@@ -35,11 +35,13 @@ class BarcodeScannerViewController: UIViewController {
   
   var config: Configuration = Configuration.with {
     $0.strings = [
-      "cancel" : "Cancel",
-      "flash_on" : "Flash on",
-      "flash_off" : "Flash off",
-      "hand_input" : "Hand input",
-      "type" : "0",
+     "title" : "扫一扫",
+     "detail" : "请将条码/二维码放入框内",
+
+      "flash_on" : "打开手电筒",
+      "flash_off" : "关闭手电筒",
+      "hand_input" : "手动输入",
+      "show_hand_input" : "0",
     ]
     $0.useCamera = -1 // Default camera
     $0.autoEnableFlash = false
@@ -76,7 +78,7 @@ class BarcodeScannerViewController: UIViewController {
     
     lazy var handInputBtn:CSButton = { ()->CSButton in
         let btn = CSButton.init(frame: CGRect.init(x: 0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width/2.0, height: 80), imagePositionMode: .top)
-        btn.setTitle("手动输入", for: .normal)
+        btn.setTitle(config.strings["hand_input"] ?? "手动输入", for: .normal)
         btn.titleLabel?.textColor = .white
         btn.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
@@ -87,8 +89,8 @@ class BarcodeScannerViewController: UIViewController {
     
     lazy var torchBtn:CSButton = { ()->CSButton in
         let btn = CSButton.init(frame: CGRect.init(x: UIScreen.main.bounds.width/2.0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width/2.0, height: 80), imagePositionMode: .top)
-        btn.setTitle("打开手电筒", for: .normal)
-        btn.setTitle("关闭手电筒", for: .selected)
+        btn.setTitle(config.strings["flash_on"] ?? "打开手电筒", for: .normal)
+        btn.setTitle(config.strings["flash_off"] ?? "关闭手电筒", for: .selected)
         btn.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
         btn.titleLabel?.textColor = .white
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
@@ -101,7 +103,7 @@ class BarcodeScannerViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    let type = (config.strings["type"] == "0" ? 0 : 1)
+    let showHandInput = config.strings["show_hand_input"] == "1"
     
     
     self.navigationController!.navigationBar.isTranslucent = true
@@ -128,15 +130,17 @@ class BarcodeScannerViewController: UIViewController {
       )
     }
     
-    let btn = UIButton.init(frame: CGRect.init(x: 0, y: 0, width:type == 0 ? 150 : 90, height: 44))
-    btn.setTitle(type == 0 ?"添加/查询母开关" : "扫一扫", for: .normal)
+    let title = config.strings["title"] ?? "扫一扫"
+    let btn = UIButton.init(frame: CGRect.init(x: 0, y: 0, width:title.count * 20 + 30, height: 44))
+//    btn.setTitle(type == 0 ?"添加/查询母开关" : "扫一扫", for: .normal)
+    btn.setTitle(title, for: .normal)
     btn.titleLabel?.textColor = .white
     btn.setImage(imageNamed("backArrow"), for: .normal)
     btn.addTarget(self, action: #selector(cancel), for: .touchUpInside)
     navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: btn)
     view.addSubview(torchBtn)
 
-    if type == 0{
+    if showHandInput{
      view.addSubview(handInputBtn)
     }else{
         torchBtn.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width, height: 80);
@@ -196,7 +200,7 @@ class BarcodeScannerViewController: UIViewController {
       scanRect?.stopAnimating()
       scanRect?.removeFromSuperview()
     }
-    scanRect = ScannerOverlay(frame: bounds)
+    scanRect = ScannerOverlay(frame: bounds,remain:config.strings["detail"] ?? "请将条码/二维码放入框内")
     if let scanRect = scanRect {
       scanRect.style = .grid
       scanRect.translatesAutoresizingMaskIntoConstraints = false

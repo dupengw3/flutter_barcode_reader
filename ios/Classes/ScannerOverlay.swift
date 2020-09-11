@@ -21,7 +21,7 @@ class ScannerOverlay: UIView {
 
     var style:ScanAnimationStyle = .default
     
-
+    var remainText:String = "请将条码/二维码放入框内"
     
 //    private var scanLineRect: CGRect {
 //        let scanRect = calculateScanRect()
@@ -34,8 +34,9 @@ class ScannerOverlay: UIView {
 //        )
 //    }
     
-    override init(frame: CGRect) {
+    init(frame: CGRect,remain:String) {
         super.init(frame: frame)
+        remainText = remain;
 //        line.backgroundColor = UIColor.red
 //        line.translatesAutoresizingMaskIntoConstraints = false
 //        addSubview(line)
@@ -84,7 +85,7 @@ class ScannerOverlay: UIView {
             
             ScanAnimation.shared.startWith(rect!, contentView, imageView: imageView)
         
-            setupTips("请将条码/二维码放入框内")
+            setupTips(remainText)
         
     }
     
