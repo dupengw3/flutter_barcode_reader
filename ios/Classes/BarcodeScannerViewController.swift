@@ -37,7 +37,6 @@ class BarcodeScannerViewController: UIViewController {
     $0.strings = [
      "title" : "扫一扫",
      "detail" : "请将条码/二维码放入框内",
-
       "flash_on" : "打开手电筒",
       "flash_off" : "关闭手电筒",
       "hand_input" : "手动输入",
@@ -160,30 +159,39 @@ class BarcodeScannerViewController: UIViewController {
     
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    
-    if scanner!.isScanning() {
-      scanner!.stopScanning()
-    }
-    
-    scanRect?.startAnimating()
-    MTBBarcodeScanner.requestCameraPermission(success: { success in
-      if success {
-        self.startScan()
-      } else {
-        #if !targetEnvironment(simulator)
-        self.errorResult(errorCode: "PERMISSION_NOT_GRANTED")
-        #endif
-      }
-    })
+       restartScan()
   }
   
-  override func viewWillDisappear(_ animated: Bool) {
-    scanner?.stopScanning()
-    scanRect?.stopAnimating()
-    
-    if isFlashOn {
-      setFlashState(false)
+    func restartScan(){
+       if scanner!.isScanning() {
+         scanner!.stopScanning()
+       }
+       
+       scanRect?.startAnimating()
+       MTBBarcodeScanner.requestCameraPermission(success: { success in
+         if success {
+           self.startScan()
+         } else {
+           #if !targetEnvironment(simulator)
+           self.errorResult(errorCode: "PERMISSION_NOT_GRANTED")
+           #endif
+         }
+       })
     }
+    
+    func stopScan(){
+        scanner?.stopScanning()
+        scanRect?.stopAnimating()
+          
+          if isFlashOn {
+            setFlashState(false)
+          }
+    }
+    
+    
+    
+  override func viewWillDisappear(_ animated: Bool) {
+   stopScan()
     
     super.viewWillDisappear(animated)
   }
@@ -247,12 +255,118 @@ class BarcodeScannerViewController: UIViewController {
   }
   
     @objc private func handInput() {
-      scanResult( ScanResult.with {
-        $0.type = ResultType.init(rawValue: 3) ?? ResultType.cancelled
-        $0.format = .unknown
-      });
+//        testAlert()
+//      scanResult( ScanResult.with {
+//        $0.type = ResultType.init(rawValue: 3) ?? ResultType.cancelled
+//        $0.format = .unknown
+//      });
+        
+        stopScan()
+
+        let alert = UIAlertController.init(title: "输入付款码", message: nil, preferredStyle: .alert)
+           alert.addTextField { (textField) in
+            textField.placeholder = "请输入付款码"
+            textField.keyboardType = .phonePad
+           }
+
+           let cancel =  UIAlertAction.init(title: "取消", style: .destructive) { [weak self](action) in
+            self?.restartScan()
+
+          }
+            alert.addAction(cancel)
+
+           let sure =  UIAlertAction.init(title: "确定", style: .default) {[weak self] (action) in
+            if let text = alert.textFields?.first?.text,text.count == 18{
+
+                let scanResult = ScanResult.with {
+                  $0.type = .barcode
+                    $0.rawContent = text
+                  $0.format =  .unknown
+                  $0.formatNote = "handInput"
+                }
+                self?.scanner!.stopScanning()
+                self?.scanResult(scanResult)
+            }else{
+                self?.showMessage("请输入正确的18位付款码!")
+            }
+            self?.restartScan()
+
+           }
+           alert.addAction(sure)
+
+        present(alert, animated: true, completion:   {() in
+        })
     }
     
+       
+    func showMessage(_ msg:String){
+     let alertController = UIAlertController(title: msg,
+                                                message: nil, preferredStyle: .alert)
+        //显示提示框
+        self.present(alertController, animated: true, completion: nil)
+        //两秒钟后自动消失
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            self.presentedViewController?.dismiss(animated: false, completion: nil)
+        }
+    }
+    
+//
+//    func testAlert(){
+//
+//            let title: String = "您的开奖时间为"
+//            let time: String = "2017-10-23 12:23:18"
+//            var countdown:Int = 6
+//            let timeout: String = "开奖时间已超时,请重新获取"
+//
+//
+//            let alertVc = UIAlertController.init(title: nil, message: title + "\n" + time, preferredStyle: UIAlertController.Style.alert)
+//
+//            let alertAction0 = UIAlertAction.init(title: "取消", style: .default, handler: { (action) in
+//
+//            })
+//            let alertAction1 = UIAlertAction.init(title: "确定(\(countdown))", style: .default, handler: { (action) in
+//                //确定的操作
+//            })
+//            alertVc.addAction(alertAction1)
+//            alertVc.addAction(alertAction0)
+//
+//           self.present(alertVc, animated: true, completion: {
+//
+//            })
+//
+//            if countdown != 0 {
+//                let queue: DispatchQueue = DispatchQueue.global()
+//                let countdownTimer = DispatchSource.makeTimerSource(flags: [], queue: queue)
+//                countdown = countdown + 1
+//                countdownTimer.schedule(deadline: .now(), repeating: .seconds(1))
+//                countdownTimer.setEventHandler(handler: {
+//                    countdown = countdown - 1
+//                    if countdown <= 0 {
+//                        countdownTimer.cancel()
+//                        DispatchQueue.main.async {
+//                            alertAction1.setValue("确定(0)", forKey: "title")
+//                            alertAction1.setValue(UIColor.gray, forKey: "titleTextColor")
+//                            alertAction1.isEnabled = false
+//                            // message
+//                            let one = "\(title)\n\(time)\n"
+//                            let two = "\(timeout)"
+//                            let message = "\(title)\n\(time)\n\(timeout)"
+//                            let alertControllerMessageStr = NSMutableAttributedString(string: message)
+//                            alertControllerMessageStr.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: NSMakeRange(one.count, two.count))
+//                            alertControllerMessageStr.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 13), range: NSMakeRange(one.count, two.count))
+//                            alertVc.setValue(alertControllerMessageStr, forKey: "attributedMessage")
+//                        }
+//                    }else {
+//                        DispatchQueue.main.async {
+//                            alertAction1.setValue("确定(\(countdown))", forKey: "title")
+//                        }
+//                    }
+//                })
+//                countdownTimer.resume()
+//            }
+//
+//    }
+//
     
   @objc private func onToggleFlash() {
     setFlashState(!isFlashOn)

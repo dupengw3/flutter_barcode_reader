@@ -73,9 +73,9 @@ class ScanAnimation:NSObject{
     
     func stopAnimation() {
         
-        displayLink?.invalidate()
+        displayLink?.isPaused = true
         
-        displayLink = nil
+       // displayLink = nil
         
     }
     

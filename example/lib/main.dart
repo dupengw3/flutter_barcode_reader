@@ -289,10 +289,12 @@ class _MyAppState extends State<_MyApp> {
     try {
       var options = ScanOptions(
         strings: {
-          "cancel": "取消",
-          "flash_on": "开灯",
-          "flash_off": "关灯",
-          "type": "1",
+        "title" : "扫一扫",
+     "detail" : "请将条码/二维码放入框内",
+      "flash_on" : "打开手电筒",
+      "flash_off" : "关闭手电筒",
+      "hand_input" : "手动输入",
+      "show_hand_input" : "1",
         },
         restrictFormat: _possibleFormats,
         useCamera: -1,
