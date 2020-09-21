@@ -57,7 +57,7 @@ class CustomViewFinderView(context: Context) : ViewFinderView(context) {
     private fun drawHint(canvas: Canvas?) {
         val left = (framingRect.right - framingRect.left) / 2.0 + framingRect.left
         val baseLineY = abs(textPaint.ascent() + textPaint.descent())
-        canvas?.drawText(context.getString(R.string.hint),
+        canvas?.drawText(detailStr,
                 left.toFloat(),
                 framingRect.bottom.toFloat() + baseLineY + Resources.getSystem().displayMetrics.density * 16,
                 textPaint)

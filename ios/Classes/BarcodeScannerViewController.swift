@@ -41,6 +41,7 @@ class BarcodeScannerViewController: UIViewController {
       "flash_off" : "关闭手电筒",
       "hand_input" : "手动输入",
       "show_hand_input" : "0",
+      "hand_input_dialog_title" : "输入付款码",
     ]
     $0.useCamera = -1 // Default camera
     $0.autoEnableFlash = false
@@ -262,10 +263,11 @@ class BarcodeScannerViewController: UIViewController {
 //      });
         
         stopScan()
-
-        let alert = UIAlertController.init(title: "输入付款码", message: nil, preferredStyle: .alert)
+        
+        let alertTitle = config.strings["hand_input_dialog_title"] ?? "输入付款码"
+        let alert = UIAlertController.init(title: alertTitle, message: nil, preferredStyle: .alert)
            alert.addTextField { (textField) in
-            textField.placeholder = "请输入付款码"
+            textField.placeholder = "请" + alertTitle
             textField.keyboardType = .phonePad
            }
 
@@ -287,7 +289,7 @@ class BarcodeScannerViewController: UIViewController {
                 self?.scanner!.stopScanning()
                 self?.scanResult(scanResult)
             }else{
-                self?.showMessage("请输入正确的18位付款码!")
+                self?.showMessage("请输入正确的付款码!")
             }
             self?.restartScan()
 

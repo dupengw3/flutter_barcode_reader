@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:src="@drawable/icon_input"/>
-            <TextView
+            <TextView android:id="@+id/hand_input_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"

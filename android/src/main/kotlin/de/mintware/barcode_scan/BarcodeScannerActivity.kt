@@ -8,16 +8,38 @@ import android.widget.TextView
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+import androidx.appcompat.app.AppCompatActivity
 
-class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
+/**
+ *   "title" : "扫一扫",
+ *   "detail" : "请将条码/二维码放入框内",
+ *   "flash_on" : "打开手电筒",
+ *   "flash_off" : "关闭手电筒",
+ *   "hand_input" : "手动输入",
+ *   "show_hand_input" : 0 代表不显示手动输入, 1 代表显示手动输入
+ */
+
+var detailStr: String = "";
+
+class BarcodeScannerActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     init {
         title = ""
     }
 
-    private var scanType: String = "0";
     private lateinit var config: Protos.Configuration
     private var scannerView: ZXingScannerView? = null
+
+    private lateinit var flashOnStr: String
+    private lateinit var flashOffStr: String
+    private lateinit var handInputStr: String
+    private lateinit var handInputDialogTitleStr: String
+    /**
+     * 0 代表不显示手动输入
+     * 1 代表显示手动输入
+     */
+    private lateinit var showHandInput: String
+
 
     companion object {
         const val EXTRA_CONFIG = "config"
@@ -43,26 +65,38 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
     // region Activity lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_barcode_scanner)
+
         config = Protos.Configuration.parseFrom(intent.extras!!.getByteArray(EXTRA_CONFIG))
-        scanType = config.stringsMap["type"] ?: "0"
+        title = config.stringsMap["title"] ?: getString(R.string.scan)
+        detailStr = config.stringsMap["detail"] ?: getString(R.string.hint)
+        flashOnStr = config.stringsMap["flash_on"] ?: getString(R.string.open_flashlight)
+        flashOffStr = config.stringsMap["flash_off"] ?: getString(R.string.close_flashlight)
+        handInputStr = config.stringsMap["hand_input"] ?: getString(R.string.manual_input_txt)
+        handInputDialogTitleStr = config.stringsMap["hand_input_dialog_title"] ?: getString(R.string.manual_input_txt)
+        showHandInput = config.stringsMap["show_hand_input"] ?: "0"
+
+        setContentView(R.layout.activity_barcode_scanner)
     }
 
     private fun setupScannerView() {
         if (scannerView != null) {
             return
         }
-        findViewById<TextView>(R.id.tv_title).setText(if (scanType == "0") R.string.add_search_switch else R.string.scan)
+        findViewById<TextView>(R.id.tv_title).setText(title)
         val tVFlashLight = findViewById<TextView>(R.id.tv_flashlight)
+        tVFlashLight.setText(flashOnStr);
         findViewById<View>(R.id.back).setOnClickListener { onBackPressed() }
-        findViewById<View>(R.id.hand_input).visibility = if (scanType == "0") View.VISIBLE else View.GONE
+
+        findViewById<TextView>(R.id.hand_input_txt).setText(handInputStr)
+        findViewById<View>(R.id.hand_input).visibility = if (showHandInput == "1") View.VISIBLE else View.GONE
         findViewById<View>(R.id.hand_input).setOnClickListener {
-            setResult(ScanResultHandler.RESULT_HAND_INPUT)
-            finish()
+            showInputDialog()
         }
-        findViewById<View>(R.id.flashlight).setOnClickListener {
+
+        findViewById<View>(R.id.flashlight)
+                .setOnClickListener {
             scannerView?.toggleFlash()
-            tVFlashLight.setText(if (scannerView?.flash == true) R.string.close_flashlight else R.string.open_flashlight)
+            tVFlashLight.setText(if (scannerView?.flash == true) flashOffStr else flashOnStr)
         }
         scannerView = findViewById(R.id.scannerView)
         scannerView?.apply {
@@ -145,5 +179,26 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         }
 
         return types
+    }
+
+    private fun showInputDialog() {
+        var fragment = ManualInputDialogFragment.newInstance(title = handInputDialogTitleStr)
+        fragment.listener = object : InputTextListener {
+            override fun onClickOk(txt: String) {
+                val builder = Protos.ScanResult.newBuilder()
+                builder.let {
+                    it.format = Protos.BarcodeFormat.unknown
+                    it.rawContent = txt
+                    it.type = Protos.ResultType.HandInput
+                }
+
+                val res = builder.build()
+                intent.putExtra(EXTRA_RESULT, res.toByteArray())
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        }
+
+        fragment.show(supportFragmentManager, "ManualInputDialog")
     }
 }

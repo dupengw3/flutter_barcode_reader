@@ -6,4 +6,9 @@
     <string name="add_search_switch">添加/查询母开关</string>
     <string name="scan">扫一扫</string>
     <string name="hint">请将条码/二维码放入框内</string>
+
+    <string name="flash_on_txt">打开手电筒</string>
+    <string name="flash_off_txt">关闭手电筒</string>
+    <string name="manual_input_txt">手动输入</string>
+
 </resources>
