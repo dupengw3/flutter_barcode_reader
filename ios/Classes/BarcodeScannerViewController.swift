@@ -278,7 +278,7 @@ class BarcodeScannerViewController: UIViewController {
             alert.addAction(cancel)
 
            let sure =  UIAlertAction.init(title: "确定", style: .default) {[weak self] (action) in
-            if let text = alert.textFields?.first?.text,text.count == 18{
+            if let text = alert.textFields?.first?.text,text.count > 5,text.count < 31 {
 
                 let scanResult = ScanResult.with {
                   $0.type = .barcode
