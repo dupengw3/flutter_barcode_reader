@@ -77,10 +77,9 @@ class BarcodeScannerViewController: UIViewController {
   
     
     lazy var handInputBtn:CSButton = { ()->CSButton in
-        let btn = CSButton.init(frame: CGRect.init(x: 0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width/2.0, height: 80), imagePositionMode: .top)
+        let btn = CSButton.init(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width/2.0, height: 80), imagePositionMode: .top)
         btn.setTitle(config.strings["hand_input"] ?? "手动输入", for: .normal)
         btn.titleLabel?.textColor = .white
-        btn.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         btn.setImage(imageNamed("hand_input"), for: .normal)
         btn.addTarget(self, action: #selector(handInput), for: .touchUpInside)
@@ -88,10 +87,10 @@ class BarcodeScannerViewController: UIViewController {
     }()
     
     lazy var torchBtn:CSButton = { ()->CSButton in
-        let btn = CSButton.init(frame: CGRect.init(x: UIScreen.main.bounds.width/2.0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width/2.0, height: 80), imagePositionMode: .top)
+        let btn = CSButton.init(frame: CGRect.init(x: UIScreen.main.bounds.width/2.0, y: 0, width: UIScreen.main.bounds.width/2.0, height: 80), imagePositionMode: .top)
         btn.setTitle(config.strings["flash_on"] ?? "打开手电筒", for: .normal)
         btn.setTitle(config.strings["flash_off"] ?? "关闭手电筒", for: .selected)
-        btn.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+       // btn.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
         btn.titleLabel?.textColor = .white
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         btn.setImage(imageNamed("torch"), for: .normal)
@@ -138,12 +137,18 @@ class BarcodeScannerViewController: UIViewController {
     btn.setImage(imageNamed("backArrow"), for: .normal)
     btn.addTarget(self, action: #selector(cancel), for: .touchUpInside)
     navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: btn)
-    view.addSubview(torchBtn)
+    
+
+    let bottomView = UIView.init(frame: CGRect.init(x: 0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width, height: 80 + safeAreaEdgeInset().bottom))
+    bottomView.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+    view.addSubview(bottomView)
+
+    bottomView.addSubview(torchBtn)
 
     if showHandInput{
-     view.addSubview(handInputBtn)
+        bottomView.addSubview(handInputBtn)
     }else{
-        torchBtn.frame = CGRect.init(x: 0, y: UIScreen.main.bounds.height - 80 - safeAreaEdgeInset().bottom, width: UIScreen.main.bounds.width, height: 80);
+      torchBtn.frame = CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 80);
     }
      
     updateToggleFlashButton()

@@ -15,7 +15,7 @@ class _MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<_MyApp> {
-  ScanResult scanResult;
+   ScanResult scanResult = ScanResult();
 
   // final _flashOnController = TextEditingController(text: "Flash on");
   // final _flashOffController = TextEditingController(text: "Flash off");

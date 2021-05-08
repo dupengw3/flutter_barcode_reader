@@ -23,10 +23,10 @@ A new flutter plugin project.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
   s.swift_version = '5.0'
 
-#  s.resource_bundle = {
-##    'barcode_scan' => ['barcode_scan/ios/Assets/*.xcassets']#  https://www.jianshu.com/p/e772b0713f9a
-#    'barcode_scan' => ['barcode_scan/**/*.{xib,png,xcassets}']
-#
-#  }
+ s.resource_bundle = {
+   'barcode_scan' => ['resource_bundle.xcassets']#https://www.it610.com/article/1296269132353839104.htm
+  #  'barcode_scan' => ['barcode_scan/**/*.{xib,png,xcassets}']
+
+ }
 
 end

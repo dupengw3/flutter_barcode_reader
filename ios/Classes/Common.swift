@@ -8,12 +8,22 @@
 
 import Foundation
 
-//let bundle = Bundle(for: BarcodeScannerViewController.self)
+
+//    NSString * bundlePath = [[NSBundle bundleForClass:[MyViewController class]].resourcePath
+//                                 stringByAppendingPathComponent:bundleNameWithExtension];
+//    NSBundle * bundle = [NSBundle bundleWithPath:bundlePath];
+//    UIImage * image = [UIImage imageNamed:@"icon_sina" inBundle:bundle compatibleWithTraitCollection:nil];
 
 
-//var bundle: Bundle{
-// let associateBundleURL:URL = (Bundle.main.url(forResource: "Frameworks", withExtension: nil)?.appendingPathComponent("barcode_scan").appendingPathExtension("framework"))!
-//  return Bundle.init(url: associateBundleURL)!
+let bundle = Bundle(for: BarcodeScannerViewController.self)
+
+
+//var bundlePath: Bundle{
+//// let associateBundleURL:URL = (Bundle.main.url(forResource: "resource_bundle", withExtension: "xcassets"))!
+////    print(associateBundleURL.absoluteString)
+////  return Bundle.init(url: associateBundleURL)!
+//    print(bundle.bundlePath)
+//    return bundle
 // }
 
 let screenWidth = UIScreen.main.bounds.width
@@ -25,7 +35,7 @@ let statusHeight = UIApplication.shared.statusBarFrame.height
 
 
 public func imageNamed(_ name:String)-> UIImage{
-    guard let image = UIImage(named: name) else{//, in: bundle, compatibleWith: nil
+    guard let image = UIImage(named: name, in: bundle, compatibleWith: nil) else{//
         return UIImage()
     }
     return image
